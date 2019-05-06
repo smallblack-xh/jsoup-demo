@@ -71,7 +71,7 @@ public class JsoupDemo1 {
         /*新笔趣阁小说查询爬取方式*/
         String searchUrl = "https://www.xbiquge6.com/search.php?keyword=";
         String baseUrl = "https://www.xbiquge6.com";
-        String keyword = "仙宫";
+        String keyword = "圣墟";
         /*新笔趣阁字段查询不需要编码加密*/
 //        keyword = URLEncoder.encode(keyword,"UTF-8");
         searchUrl = searchUrl+keyword;
@@ -104,8 +104,34 @@ public class JsoupDemo1 {
             }
         }
     }
+    public static void test5() throws IOException {
+        /*顶点小说爬取方式 编码方式不确定*/
+        String searchUrl = "https://www.x23us.com/modules/article/search.php?searchtype=keywords&searchkey=";
+        String keyword = "圣墟";
+        searchUrl =searchUrl+URLEncoder.encode(keyword,"UTF-8");
+        System.out.println(searchUrl);
+        Document document = Jsoup.connect(searchUrl).userAgent(userAgent).timeout(500000).get();
+        System.out.println(document);
+//        String url = "https://www.x23us.com/book/65650";
+//        Document document = Jsoup.connect(url).userAgent(userAgent).timeout(500000).get();
+//        Elements select = document.select(".hst");
+//        String novelUrl = select.attr("href");
+//        Document document1 = Jsoup.connect(novelUrl).userAgent(userAgent).timeout(500000).get();
+//        Elements elements = document1.select(".L a");
+//        for(Element element:elements){
+//            if(element.attr("href").contains("vipreader")){
+//                System.out.println("VIP不可读");
+//                return;
+//            }else {
+//                System.out.println(element.attr("href")+" #### "+element.text());
+//            }
+//        }
+    }
+    public static void test6() throws IOException {
+
+    }
 
     public static void main(String[] args) throws IOException {
-        test3();
+        test5();
     }
 }
