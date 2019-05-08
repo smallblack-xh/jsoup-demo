@@ -1,5 +1,6 @@
 package com.linkk.jsoupdemo.client;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.UUID;
 
 /**
  * @author: linkk
@@ -105,12 +107,15 @@ public class JsoupDemo1 {
         }
     }
     public static void test5() throws IOException {
-        /*顶点小说爬取方式 编码方式不确定*/
+        /*顶点小说爬取方式 编码方式不确定 暂时搁置，有用户爬取限制*/
         String searchUrl = "https://www.x23us.com/modules/article/search.php?searchtype=keywords&searchkey=";
-        String keyword = "圣墟";
-        searchUrl =searchUrl+URLEncoder.encode(keyword,"UTF-8");
+        String keyword = "元尊";
+        String submit = "搜索";
+        searchUrl =searchUrl+URLEncoder.encode(keyword,"gb2312");
+        searchUrl = searchUrl+"&action=login&submit="+URLEncoder.encode(submit,"gb2312");
         System.out.println(searchUrl);
-        Document document = Jsoup.connect(searchUrl).userAgent(userAgent).timeout(500000).get();
+        String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36";
+        Document document = Jsoup.connect(searchUrl).userAgent(userAgent).timeout(500000).method(Connection.Method.GET).followRedirects(true).maxBodySize(0).get();
         System.out.println(document);
 //        String url = "https://www.x23us.com/book/65650";
 //        Document document = Jsoup.connect(url).userAgent(userAgent).timeout(500000).get();
@@ -128,10 +133,26 @@ public class JsoupDemo1 {
 //        }
     }
     public static void test6() throws IOException {
-
+        /*https://www.2717.com图片网站图片url抓取*/
+        String baseUrl = "https://www.2717.com/ent/meinvtupian/2019/";
+        String url = "https://www.2717.com/ent/meinvtupian/2019/315004.html";
+        Document document = Jsoup.connect(url).userAgent(userAgent).get();
+        Elements totalElement = document.select("#pageinfo");
+        Elements a = totalElement.select("a");
+        String s = a.text().replace("共", "").replace("页:","").replace(" ","");
+        System.out.println(Integer.parseInt(s));
+        for(int i=1;i<=Integer.parseInt(s);i++){
+            String tempUrl = baseUrl + "315004_"+i+".html";
+            Document document1 = Jsoup.connect(tempUrl).userAgent(userAgent).get();
+            Elements select = document1.select("#picBody a");
+            Elements img = select.select("img");
+            System.out.println(img.attr("alt")+"===>"+img.attr("src"));
+            Utils.downImages(null,img.attr("src"));
+        }
     }
 
     public static void main(String[] args) throws IOException {
-        test5();
+//        System.out.println(UUID.randomUUID().toString().replace("-",""));
+        test6();
     }
 }
