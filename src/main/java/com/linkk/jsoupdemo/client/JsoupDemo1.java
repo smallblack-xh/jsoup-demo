@@ -151,8 +151,24 @@ public class JsoupDemo1 {
         }
     }
 
+    public static void test7() throws IOException {
+        /*https://www.2717.com图片网站图片url抓取*/
+        String baseUrl = "http://www.mm131.com/qingchun/";
+        Document document = Jsoup.connect(baseUrl).get();
+        System.out.println(document);
+        /*思路，每个版块的页面都由
+        * http://www.mm131.com/mingxing/list_5_2.html
+        * 类型组成
+        * 方法：
+        * 1、获取每个版块的页面
+        * 2、把当前版块比如http://www.mm131.com/mingxing/下的所有图片集合拿出来
+        * 3、拿到分页表里面的页面编号
+        * 4、循环页面获取图片集合
+        * */
+    }
+
     public static void main(String[] args) throws IOException {
 //        System.out.println(UUID.randomUUID().toString().replace("-",""));
-        test6();
+        test7();
     }
 }
